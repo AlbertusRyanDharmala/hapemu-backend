@@ -9,6 +9,7 @@ import (
 	"net/http"
 	"os"
 	"os/exec"
+	"time"
 
 	_ "github.com/lib/pq"
 )
@@ -19,6 +20,7 @@ const (
 	user     = "postgres.yovcppevikilglvpktzq"
 	password = "HapemuPostgres123"
 	dbname   = "postgres"
+	format   = "2006-01-02" // specify yyyy-mm-dd format
 )
 
 func InsertDxoMarkToDatabase() {
@@ -72,8 +74,8 @@ func InsertDxoMarkToDatabase() {
 		log.Fatal("Error Deleting from database:", err)
 	}
 	sqlStatement := `
-	INSERT INTO "Smartphone" (name, brand, "dxomarkScore", photo, bokeh, preview, zoom, video, price, "segmentPrice", "imageLink", "launchDate")
-	VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12)
+	INSERT INTO "Smartphone" (name, brand, "dxomarkScore", photo, bokeh, preview, zoom, video, price, "segmentPrice", "imageLink", "launchDate", "isLastThreeYear")
+	VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13)
 	RETURNING id`
 
 	var smartphoneList []model.Smartphone
@@ -86,7 +88,7 @@ func InsertDxoMarkToDatabase() {
 
 	for _, smartphone := range smartphoneList {
 		_, err = db.Exec(sqlStatement, smartphone.Name, smartphone.Brand, smartphone.DxomarkScore, smartphone.Photo, smartphone.Bokeh, smartphone.Preview,
-			smartphone.Zoom, smartphone.Video, smartphone.Price, smartphone.SegmentPrice, smartphone.ImageLink, smartphone.LaunchDate)
+			smartphone.Zoom, smartphone.Video, smartphone.Price, smartphone.SegmentPrice, smartphone.ImageLink, smartphone.LaunchDate, smartphone.IsLastThreeYears)
 		if err != nil {
 			log.Fatal("Error inserting into database:", err)
 		}
@@ -142,5 +144,17 @@ func mapToSmartphone(dxomark model.DxoMark) model.Smartphone {
 	smartphone.Price = dxomark.Price
 	smartphone.SegmentPrice = dxomark.SegmentPrice
 	smartphone.LaunchDate = dxomark.LaunchDate
+	smartphone.IsLastThreeYears = IsLastThreeYears(smartphone.LaunchDate)
 	return smartphone
+}
+
+func IsLastThreeYears(dateString string) bool {
+	parsedDate, err := time.Parse(format, dateString)
+	if err != nil {
+		fmt.Println("error when parsing date")
+	}
+	currentTime := time.Now()
+	threeYearsAgo := currentTime.AddDate(-3, 0, 0)
+
+	return parsedDate.After(threeYearsAgo) && parsedDate.Before(currentTime)
 }
