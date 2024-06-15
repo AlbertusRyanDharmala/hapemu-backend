@@ -4,13 +4,14 @@ import (
 	"hapemu/service"
 	"log"
 	"net/http"
+
+	"github.com/rs/cors"
 )
 
 func main() {
-	http.HandleFunc("/sendEmail", service.EmailRecommendations)
+	http.HandleFunc("/send-email", service.EmailRecommendations)
 
-	// http.HandleFunc("/antutu", service.GetAntutuList)
-	// http.HandleFunc("/dxomark", service.GetDxoMarkList)
+	handler := cors.Default().Handler(http.DefaultServeMux)
 
-	log.Fatal(http.ListenAndServe(":8080", nil))
+	log.Fatal(http.ListenAndServe(":8080", handler))
 }
