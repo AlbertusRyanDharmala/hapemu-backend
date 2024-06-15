@@ -9,7 +9,6 @@ import (
 	"net/smtp"
 )
 
-// EmailService represents the email service with configuration
 type EmailService struct {
 	smtpPort int
 	smtpHost string
@@ -17,7 +16,6 @@ type EmailService struct {
 	password string
 }
 
-// NewEmailService creates a new EmailService
 func NewEmailService(port int, host, username, password string) *EmailService {
 	return &EmailService{
 		smtpPort: port,
@@ -27,17 +25,14 @@ func NewEmailService(port int, host, username, password string) *EmailService {
 	}
 }
 
-// SendEmail sends an email with the given recipient, subject, and body
 func (s *EmailService) SendEmail(to, subject, body string) (bool, error) {
 	auth := smtp.PlainAuth("", s.username, s.password, s.smtpHost)
 	from := s.username
 
-	// Set up headers and body for HTML email
 	headers := fmt.Sprintf("From: %s\r\nTo: %s\r\nSubject: %s\r\nMIME-version: 1.0;\r\nContent-Type: text/html; charset=\"UTF-8\";\r\n\r\n", from, to, subject)
 	htmlBody := fmt.Sprintf(`<html><body style="font-family: 'Arial', sans-serif; font-size: 16px;">%s</body></html>`, body)
 	msg := []byte(headers + htmlBody)
 
-	// Send the email
 	err := smtp.SendMail(fmt.Sprintf("%s:%d", s.smtpHost, s.smtpPort), auth, from, []string{to}, msg)
 	if err != nil {
 		return false, err
@@ -101,8 +96,6 @@ func EmailRecommendations(w http.ResponseWriter, r *http.Request) {
 	}
 
 	w.Header().Set("Content-Type", "application/json")
-
-	// Set the response body to a JSON string
 
 	var emailResponse model.EmailResponse
 	if sent {
