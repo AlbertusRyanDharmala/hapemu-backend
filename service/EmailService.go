@@ -6,31 +6,70 @@ import (
 	"hapemu/model"
 	"log"
 	"net/http"
-
-	"github.com/MakMoinee/go-mith/pkg/email"
+	"net/smtp"
 )
 
-func EmailRecommendation() {
-	emailService := email.NewEmailService(587, "smtp.gmail.com", "onlyforancile@gmail.com", "zhqwpzuzjhivnvsx")
+// EmailService represents the email service with configuration
+type EmailService struct {
+	smtpPort int
+	smtpHost string
+	username string
+	password string
+}
 
-	var messages = `Here are top 5 recommendations for you based on the quiz. We hope you find them useful:
-	1. smartphone 1
-	2. smartphone 2
-	3. smartphone 3
-	4. smartphone 4
-	5. smartphone 5`
-	sent, err := emailService.SendEmail("yosuajayapura@gmail.com", "Email recommendations from hapemu", messages)
-
-	if err != nil {
-		log.Fatalf("Error when sending email: %s", err)
-	}
-
-	if sent {
-		log.Println("Email sent successfully")
-	} else {
-		log.Println("fail to send email")
+// NewEmailService creates a new EmailService
+func NewEmailService(port int, host, username, password string) *EmailService {
+	return &EmailService{
+		smtpPort: port,
+		smtpHost: host,
+		username: username,
+		password: password,
 	}
 }
+
+// SendEmail sends an email with the given recipient, subject, and body
+func (s *EmailService) SendEmail(to, subject, body string) (bool, error) {
+	auth := smtp.PlainAuth("", s.username, s.password, s.smtpHost)
+	from := s.username
+
+	// Set up headers and body for HTML email
+	headers := fmt.Sprintf("From: %s\r\nTo: %s\r\nSubject: %s\r\nMIME-version: 1.0;\r\nContent-Type: text/html; charset=\"UTF-8\";\r\n\r\n", from, to, subject)
+	htmlBody := fmt.Sprintf(`<html><body style="font-family: 'Arial', sans-serif; font-size: 16px;">%s</body></html>`, body)
+	msg := []byte(headers + htmlBody)
+
+	// Send the email
+	err := smtp.SendMail(fmt.Sprintf("%s:%d", s.smtpHost, s.smtpPort), auth, from, []string{to}, msg)
+	if err != nil {
+		return false, err
+	}
+	return true, nil
+}
+
+// for testing
+// func EmailRecommendation() {
+// 	emailService := NewEmailService(587, "smtp.gmail.com", "hapemu.id@gmail.com", "fdvtmvobhemhxvvi")
+
+// 	var messages = `<p>Here are top 5 recommendations for you based on the quiz. We hope you find them useful:</p>
+//     <ol>
+//         <li>%s</li>
+//         <li>smartphone 2</li>
+//         <li>smartphone 3</li>
+//         <li>smartphone 4</li>
+//         <li>smartphone 5</li>
+//     </ol>`
+// 	formattedMessage := fmt.Sprintf(messages, "Samsung S24")
+// 	sent, err := emailService.SendEmail("ard00243@gmail.com", "Email recommendations from hapemu", formattedMessage)
+
+// 	if err != nil {
+// 		log.Fatalf("Error when sending email: %s", err)
+// 	}
+
+// 	if sent {
+// 		log.Println("Email sent successfully")
+// 	} else {
+// 		log.Println("fail to send email")
+// 	}
+// }
 
 func EmailRecommendations(w http.ResponseWriter, r *http.Request) {
 	var emailRequest model.EmailRequest
@@ -42,14 +81,16 @@ func EmailRecommendations(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	emailService := email.NewEmailService(587, "smtp.gmail.com", "onlyforancile@gmail.com", "zhqwpzuzjhivnvsx")
+	emailService := NewEmailService(587, "smtp.gmail.com", "hapemu.id@gmail.com", "fdvtmvobhemhxvvi")
 
-	var message = `Here are top 5 recommendations for you based on the quiz. We hope you find them useful:
-	1. %s
-	2. %s
-	3. %s
-	4. %s
-	5. %s`
+	var message = `<p>Here are top 5 recommendations for you based on the quiz. We hope you find them useful:</p>
+    <ol>
+        <li>%s</li>
+        <li>%s</li>
+        <li>%s</li>
+        <li>%s</li>
+        <li>%s</li>
+    </ol>`
 
 	var recommendations = emailRequest.Recommendations
 	formattedMessage := fmt.Sprintf(message, recommendations[0], recommendations[1], recommendations[2], recommendations[3], recommendations[4])
