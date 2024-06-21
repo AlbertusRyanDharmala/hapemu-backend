@@ -250,7 +250,7 @@ func RecommendSmartphones(w http.ResponseWriter, r *http.Request) {
 	defer db.Close()
 
 	var smartphones []model.Smartphone
-	sqlStatement := `SELECT name, segmentPrice, processor, dxomarkScore, battery, ram, storage FROM "Smartphone"`
+	sqlStatement := `SELECT name, "segmentPrice", processor, "dxomarkScore", battery, ram, storage FROM "Smartphone"`
 	rows, err := db.Query(sqlStatement)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -282,3 +282,42 @@ func RecommendSmartphones(w http.ResponseWriter, r *http.Request) {
 	}
 	w.Write(response)
 }
+
+// func TestGetSmartphone() {
+// 	psqlInfo := fmt.Sprintf("host=%s port=%d user=%s password=%s dbname=%s sslmode=disable", host, port, user, password, dbname)
+// 	db, err := sql.Open("postgres", psqlInfo)
+// 	if err != nil {
+// 		fmt.Println("failed on connecting to database " + err.Error())
+// 		return
+// 	}
+// 	defer db.Close()
+
+// 	var smartphones []model.Smartphone
+// 	sqlStatement := `SELECT name, "segmentPrice", processor, "dxomarkScore", battery, ram, storage FROM "TestSmartphone"`
+// 	rows, err := db.Query(sqlStatement)
+// 	if err != nil {
+// 		fmt.Println("failed on query " + err.Error())
+// 		return
+// 	}
+// 	defer rows.Close()
+
+// 	for rows.Next() {
+// 		var smartphone model.Smartphone
+// 		err := rows.Scan(&smartphone.Name, &smartphone.SegmentPrice, &smartphone.Processor, &smartphone.DxomarkScore, &smartphone.Battery, &smartphone.Ram, &smartphone.Storage)
+// 		if err != nil {
+// 			fmt.Println("Error when scanning to go struct " + err.Error())
+// 			return
+// 		}
+// 		smartphones = append(smartphones, smartphone)
+// 	}
+
+// 	for _, phone := range smartphones {
+// 		fmt.Println(phone.Name)
+// 		fmt.Println(phone.SegmentPrice)
+// 		fmt.Println(phone.Processor)
+// 		fmt.Println(phone.DxomarkScore)
+// 		fmt.Println(phone.Battery)
+// 		fmt.Println(phone.Ram)
+// 		fmt.Println(phone.Storage)
+// 	}
+// }
