@@ -34,6 +34,137 @@ func getValueForPrice(price string) float64 {
 	return 4
 }
 
+func getValueForProcessor(processor string) float64 {
+	sTierProcessors := []string{
+		"Snapdragon 8 Gen 3",
+		"Snapdragon 8s Gen 3",
+		"Snapdragon 8 Gen 2",
+		"Dimensity 9300",
+		"Dimensity 9200",
+		"Dimensity 9000",
+		"Exynos 2200",
+		"Exynos 2100",
+		"Kirin 9000",
+		"Kirin 9000e",
+		"Apple A17 Bionic",
+		"Apple A16 Bionic",
+		"Apple A15 Bionic",
+	}
+
+	aTierProcessors := []string{
+		"Snapdragon 8+ Gen 1",
+		"Snapdragon 8 Gen 1",
+		"Snapdragon 7+ Gen 2",
+		"Snapdragon 888+",
+		"Snapdragon 888",
+		"Snapdragon 870",
+		"Snapdragon 865+",
+		"Dimensity 8300",
+		"Dimensity 8200",
+		"Dimensity 8100",
+		"Exynos 1080",
+		"Exynos 990",
+		"Exynos 9825",
+		"Exynos 9820",
+		"Kirin 990",
+		"Kirin 985",
+		"Kirin 980",
+		"Apple A14 Bionic",
+		"Apple A13 Bionic",
+	}
+
+	bTierProcessors := []string{
+		"Snapdragon 7 Gen 3",
+		"Snapdragon 7s Gen 2",
+		"Snapdragon 7 Gen 1",
+		"Snapdragon 782",
+		"Snapdragon 780",
+		"Snapdragon 778G",
+		"Snapdragon 768",
+		"Snapdragon 765G",
+		"Snapdragon 750",
+		"Snapdragon 732",
+		"Dimensity 8050",
+		"Dimensity 8020",
+		"Dimensity 8000",
+		"Dimensity 7200",
+		"Dimensity 7000",
+		"Exynos 980",
+		"Exynos 9810",
+		"Exynos 9611",
+		"Exynos 9610",
+		"Helio G99",
+		"Helio G96",
+		"Helio G95",
+		"Helio G90T",
+		"Kirin 970",
+		"Kirin 810",
+		"Kirin 820 5G",
+		"Apple A12 Bionic",
+		"Apple A11 Bionic",
+	}
+
+	cTierProcessors := []string{
+		"Snapdragon 6 Gen 1",
+		"Snapdragon 4 Gen 2",
+		"Snapdragon 4 Gen 1",
+		"Snapdragon 730G",
+		"Snapdragon 730",
+		"Snapdragon 720",
+		"Snapdragon 712",
+		"Snapdragon 710",
+		"Snapdragon 695",
+		"Snapdragon 690",
+		"Snapdragon 685",
+		"Snapdragon 680",
+		"Snapdragon 675",
+		"Snapdragon 670",
+		"Snapdragon 665",
+		"Snapdragon 662",
+		"Snapdragon 660",
+		"Dimensity 7020",
+		"Dimensity 7030",
+		"Dimensity 6100",
+		"Dimensity 6080",
+		"Exynos 850",
+		"Exynos 8895",
+		"Helio G88",
+		"Helio G85",
+		"Helio G80",
+		"Helio G70",
+		"Helio P90",
+		"Helio P70",
+		"Helio P65",
+		"Helio P60",
+		"Kirin 710",
+		"Kirin 659",
+		"Apple A10 Fusion",
+	}
+
+	for _, cur := range sTierProcessors {
+		if strings.Contains(processor, cur) {
+			return 4
+		}
+	}
+
+	for _, cur := range aTierProcessors {
+		if strings.Contains(processor, cur) {
+			return 3
+		}
+	}
+	for _, cur := range bTierProcessors {
+		if strings.Contains(processor, cur) {
+			return 2
+		}
+	}
+	for _, cur := range cTierProcessors {
+		if strings.Contains(processor, cur) {
+			return 1
+		}
+	}
+	return 4
+}
+
 func getValueForCamera(camera int) float64 {
 	if camera <= 75 {
 		return 1
@@ -133,7 +264,7 @@ func getValueForStorage(storage string, storageVec float64) float64 {
 func convertSmartphoneToVec(smartphone model.Smartphone, targetVec []float64) []float64 {
 	var smartphonesVecs []float64
 	smartphonesVecs = append(smartphonesVecs, getValueForPrice(smartphone.SegmentPrice))            // price
-	smartphonesVecs = append(smartphonesVecs, targetVec[1])                                         // processor
+	smartphonesVecs = append(smartphonesVecs, getValueForProcessor(smartphone.Processor))           // processor
 	smartphonesVecs = append(smartphonesVecs, getValueForCamera(smartphone.DxomarkScore))           // camera
 	smartphonesVecs = append(smartphonesVecs, getValueForBattery(smartphone.Battery))               // battery
 	smartphonesVecs = append(smartphonesVecs, getValueForRam(smartphone.Ram, targetVec[4]))         // ram
