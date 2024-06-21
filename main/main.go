@@ -10,6 +10,7 @@ import (
 
 func main() {
 	http.HandleFunc("/send-email", service.EmailRecommendations)
+	http.HandleFunc("/get-recommendations", service.RecommendSmartphones)
 
 	handler := cors.Default().Handler(http.DefaultServeMux)
 
