@@ -9,8 +9,8 @@ type RecommendationsRequest struct {
 	Storage   string `json:"storage"`
 }
 
+// Struct to hold an item and its similarity score
 type SmartphoneSimilarity struct {
-	// Struct to hold an item and its similarity score
 	Name       string
 	Similarity float64
 }
@@ -20,7 +20,6 @@ type RecommendationsResponse struct {
 }
 
 type Smartphone struct {
-	// defining values of struct
 	Name         string
 	SegmentPrice string
 	Processor    string

@@ -132,8 +132,8 @@ func getValueForStorage(storage string, storageVec float64) float64 {
 
 func convertSmartphoneToVec(smartphone model.Smartphone, targetVec []float64) []float64 {
 	var smartphonesVecs []float64
-	smartphonesVecs = append(smartphonesVecs, getValueForPrice(smartphone.SegmentPrice)) // price
-	// smartphonesVecs = append(smartphonesVecs) // processor
+	smartphonesVecs = append(smartphonesVecs, getValueForPrice(smartphone.SegmentPrice))            // price
+	smartphonesVecs = append(smartphonesVecs, targetVec[1])                                         // processor
 	smartphonesVecs = append(smartphonesVecs, getValueForCamera(smartphone.DxomarkScore))           // camera
 	smartphonesVecs = append(smartphonesVecs, getValueForBattery(smartphone.Battery))               // battery
 	smartphonesVecs = append(smartphonesVecs, getValueForRam(smartphone.Ram, targetVec[4]))         // ram
@@ -171,18 +171,14 @@ func cosineSimilarity(vec1, vec2 []float64) float64 {
 func recommendSmartphone(smartphones []model.Smartphone, targetPhoneVec []float64) []model.SmartphoneSimilarity {
 	var similarities []model.SmartphoneSimilarity
 
-	// Calculate similarity of each movie with the target movie
 	for _, smartphone := range smartphones {
 		similarity := cosineSimilarity(convertSmartphoneToVec(smartphone, targetPhoneVec), targetPhoneVec)
 		similarities = append(similarities, model.SmartphoneSimilarity{Name: smartphone.Name, Similarity: similarity})
 	}
-
-	// Sort movies by similarity in descending order
 	sort.Slice(similarities, func(i, j int) bool {
 		return similarities[i].Similarity > similarities[j].Similarity
 	})
 
-	// Return top 5 similar movies
 	if len(similarities) > 5 {
 		return similarities[:5]
 	}
