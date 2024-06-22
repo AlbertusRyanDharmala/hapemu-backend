@@ -191,12 +191,12 @@ func getValueForBattery(battery string) float64 {
 	return 4
 }
 
-func getVecValueFromRam(ram string) float64 {
-	if ram == "1" || ram == "2" || ram == "4" {
+func getVecValueFromRam(ram int) float64 {
+	if ram <= 4 {
 		return 1
-	} else if ram == "6" || ram == "8" {
+	} else if ram <= 8 {
 		return 2
-	} else if ram == "12" {
+	} else if ram <= 12 {
 		return 3
 	} else {
 		return 4
@@ -204,18 +204,27 @@ func getVecValueFromRam(ram string) float64 {
 }
 
 func getValueForRam(ram string, ramVec float64) float64 {
-	var ramList = []string{"1", "2", "4", "6", "8", "12", "16", "32"}
 	var minVec, maxVec float64
-	for _, cur := range ramList {
-		if strings.Contains(ram, cur) {
-			minVec = getVecValueFromRam(cur)
-			break
+	minVec = 100
+	maxVec = -1
+	var curr int
+	for i := 0; i < len(ram); i++ {
+		if ram[i] > '0' && ram[i] <= '9' {
+			curr = curr*10 + int(ram[i]-'0')
+		} else {
+			if curr != 0 {
+				fmt.Println(curr)
+				minVec = math.Min(minVec, getVecValueFromRam(curr))
+				maxVec = math.Max(maxVec, getVecValueFromRam(curr))
+				curr = 0
+			}
 		}
 	}
-	for _, cur := range ramList {
-		if strings.Contains(ram, cur) {
-			maxVec = getVecValueFromRam(cur)
-		}
+	if curr != 0 {
+		fmt.Println(curr)
+		minVec = math.Min(minVec, getVecValueFromRam(curr))
+		maxVec = math.Max(maxVec, getVecValueFromRam(curr))
+		curr = 0
 	}
 	if ramVec < minVec {
 		return minVec

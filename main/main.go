@@ -9,7 +9,6 @@ import (
 )
 
 func main() {
-	// service.TestGetSmartphone()
 	http.HandleFunc("/send-email", service.EmailRecommendations)
 	http.HandleFunc("/get-recommendations", service.RecommendSmartphones)
 
