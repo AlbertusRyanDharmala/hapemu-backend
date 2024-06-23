@@ -370,8 +370,10 @@ func getPriceValue(price string) float64 {
 		return 2
 	} else if strings.Contains(price, "premium") {
 		return 3
+	} else if strings.Contains(price, "ultra") {
+		return 4
 	}
-	return 4
+	return 2.5 // default value
 }
 
 func getValue(str string) float64 {
@@ -381,8 +383,10 @@ func getValue(str string) float64 {
 		return 2
 	} else if strings.Contains(str, "penting") {
 		return 3
+	} else if strings.Contains(str, "sangat") {
+		return 4
 	}
-	return 4
+	return 2.5 // default value
 }
 
 func convertRecommendationRequestToTargetVec(request model.RecommendationsRequest) []float64 {
@@ -391,7 +395,7 @@ func convertRecommendationRequestToTargetVec(request model.RecommendationsReques
 	vec = append(vec, getPriceValue(request.Price))
 	vec = append(vec, getValue(request.Processor))
 	vec = append(vec, getValue(request.Camera))
-	vec = append(vec, getValue(request.Baterry))
+	vec = append(vec, getValue(request.Battery))
 	vec = append(vec, getValue(request.Ram))
 	vec = append(vec, getValue(request.Storage))
 
