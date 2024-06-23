@@ -53,8 +53,10 @@ func getValueForProcessor(processor string) float64 {
 		"Kirin 9000",
 		"Kirin 9000e",
 		"Apple A17 Bionic",
+		"Apple A17 Pro",
 		"Apple A16 Bionic",
 		"Apple A15 Bionic",
+		"Dimensity 9200+",
 	}
 
 	aTierProcessors := []string{
@@ -67,7 +69,10 @@ func getValueForProcessor(processor string) float64 {
 		"Snapdragon 865+",
 		"Dimensity 8300",
 		"Dimensity 8200",
+		"Dimensity 8200 Ultra",
 		"Dimensity 8100",
+		"Dimensity 8100 Ultra",
+		"Dimensity 1080",
 		"Exynos 1080",
 		"Exynos 990",
 		"Exynos 9825",
@@ -86,19 +91,25 @@ func getValueForProcessor(processor string) float64 {
 		"Snapdragon 782",
 		"Snapdragon 780",
 		"Snapdragon 778G",
+		"Snapdragon 778G 5G",
 		"Snapdragon 768",
 		"Snapdragon 765G",
+		"Snapdragon 765G 5G",
 		"Snapdragon 750",
+		"Snapdragon 750G 5G",
 		"Snapdragon 732",
+		"Snapdragon 732G",
 		"Dimensity 8050",
 		"Dimensity 8020",
 		"Dimensity 8000",
 		"Dimensity 7200",
 		"Dimensity 7000",
+		"Dimensity 700",
 		"Exynos 980",
 		"Exynos 9810",
 		"Exynos 9611",
 		"Exynos 9610",
+		"Exynos 1380",
 		"Helio G99",
 		"Helio G96",
 		"Helio G95",
@@ -120,9 +131,12 @@ func getValueForProcessor(processor string) float64 {
 		"Snapdragon 712",
 		"Snapdragon 710",
 		"Snapdragon 695",
+		"Snapdragon 695 5G",
 		"Snapdragon 690",
 		"Snapdragon 685",
 		"Snapdragon 680",
+		"Snapdragon 680 4G",
+		"Snapdragon 678",
 		"Snapdragon 675",
 		"Snapdragon 670",
 		"Snapdragon 665",
@@ -131,6 +145,7 @@ func getValueForProcessor(processor string) float64 {
 		"Dimensity 7020",
 		"Dimensity 7030",
 		"Dimensity 6100",
+		"Dimensity 6100+",
 		"Dimensity 6080",
 		"Exynos 850",
 		"Exynos 8895",
@@ -145,6 +160,20 @@ func getValueForProcessor(processor string) float64 {
 		"Kirin 710",
 		"Kirin 659",
 		"Apple A10 Fusion",
+		"Snapdragon 865 5G+",
+		"Snapdragon 865 5G",
+		"Snapdragon 855",
+		"Snapdragon 855+",
+		"Snapdragon 845",
+		"Snapdragon 835",
+		"Exynos 1280",
+		"Exynos 1480",
+		"Google Tensor G3",
+		"Google Tensor G2",
+		"Google Tensor",
+		"MT6785V",
+		"MT6769V",
+		"Apple A9",
 	}
 
 	for _, cur := range sTierProcessors {
@@ -219,7 +248,6 @@ func getValueForRam(ram string, ramVec float64) float64 {
 			curr = curr*10 + int(ram[i]-'0')
 		} else {
 			if curr != 0 {
-				fmt.Println(curr)
 				minVec = math.Min(minVec, getVecValueFromRam(curr))
 				maxVec = math.Max(maxVec, getVecValueFromRam(curr))
 				curr = 0
@@ -227,7 +255,6 @@ func getValueForRam(ram string, ramVec float64) float64 {
 		}
 	}
 	if curr != 0 {
-		fmt.Println(curr)
 		minVec = math.Min(minVec, getVecValueFromRam(curr))
 		maxVec = math.Max(maxVec, getVecValueFromRam(curr))
 		curr = 0
@@ -341,8 +368,10 @@ func getPriceValue(price string) float64 {
 		return 2
 	} else if strings.Contains(price, "premium") {
 		return 3
+	} else if strings.Contains(price, "ultra") {
+		return 4
 	}
-	return 4
+	return 2.5 // default value
 }
 
 func getValue(str string) float64 {
@@ -352,8 +381,10 @@ func getValue(str string) float64 {
 		return 2
 	} else if strings.Contains(str, "penting") {
 		return 3
+	} else if strings.Contains(str, "sangat") {
+		return 4
 	}
-	return 4
+	return 2.5 // default value
 }
 
 func convertRecommendationRequestToTargetVec(request model.RecommendationsRequest) []float64 {
@@ -362,7 +393,7 @@ func convertRecommendationRequestToTargetVec(request model.RecommendationsReques
 	vec = append(vec, getPriceValue(request.Price))
 	vec = append(vec, getValue(request.Processor))
 	vec = append(vec, getValue(request.Camera))
-	vec = append(vec, getValue(request.Baterry))
+	vec = append(vec, getValue(request.Battery))
 	vec = append(vec, getValue(request.Ram))
 	vec = append(vec, getValue(request.Storage))
 
@@ -451,17 +482,17 @@ func getSmartphoneList() []model.Smartphone {
 		smartphones = append(smartphones, smartphone)
 	}
 
-	for _, phone := range smartphones {
-		fmt.Println("Name: " + phone.Name)
-		fmt.Println("SegmentPrice: " + phone.SegmentPrice)
-		fmt.Println("Processor: " + phone.Processor)
-		fmt.Print("Dxomark Score: ")
-		fmt.Println(phone.DxomarkScore)
-		fmt.Println("Battery: " + phone.Battery)
-		fmt.Println("Ram: " + phone.Ram)
-		fmt.Println("Storage: " + phone.Storage)
-		fmt.Println()
-	}
+	// for _, phone := range smartphones {
+	// 	fmt.Println("Name: " + phone.Name)
+	// 	fmt.Println("SegmentPrice: " + phone.SegmentPrice)
+	// 	fmt.Println("Processor: " + phone.Processor)
+	// 	fmt.Print("Dxomark Score: ")
+	// 	fmt.Println(phone.DxomarkScore)
+	// 	fmt.Println("Battery: " + phone.Battery)
+	// 	fmt.Println("Ram: " + phone.Ram)
+	// 	fmt.Println("Storage: " + phone.Storage)
+	// 	fmt.Println()
+	// }
 	return smartphones
 }
 
