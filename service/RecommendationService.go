@@ -248,7 +248,6 @@ func getValueForRam(ram string, ramVec float64) float64 {
 			curr = curr*10 + int(ram[i]-'0')
 		} else {
 			if curr != 0 {
-				fmt.Println(curr)
 				minVec = math.Min(minVec, getVecValueFromRam(curr))
 				maxVec = math.Max(maxVec, getVecValueFromRam(curr))
 				curr = 0
@@ -256,7 +255,6 @@ func getValueForRam(ram string, ramVec float64) float64 {
 		}
 	}
 	if curr != 0 {
-		fmt.Println(curr)
 		minVec = math.Min(minVec, getVecValueFromRam(curr))
 		maxVec = math.Max(maxVec, getVecValueFromRam(curr))
 		curr = 0
@@ -484,17 +482,17 @@ func getSmartphoneList() []model.Smartphone {
 		smartphones = append(smartphones, smartphone)
 	}
 
-	for _, phone := range smartphones {
-		fmt.Println("Name: " + phone.Name)
-		fmt.Println("SegmentPrice: " + phone.SegmentPrice)
-		fmt.Println("Processor: " + phone.Processor)
-		fmt.Print("Dxomark Score: ")
-		fmt.Println(phone.DxomarkScore)
-		fmt.Println("Battery: " + phone.Battery)
-		fmt.Println("Ram: " + phone.Ram)
-		fmt.Println("Storage: " + phone.Storage)
-		fmt.Println()
-	}
+	// for _, phone := range smartphones {
+	// 	fmt.Println("Name: " + phone.Name)
+	// 	fmt.Println("SegmentPrice: " + phone.SegmentPrice)
+	// 	fmt.Println("Processor: " + phone.Processor)
+	// 	fmt.Print("Dxomark Score: ")
+	// 	fmt.Println(phone.DxomarkScore)
+	// 	fmt.Println("Battery: " + phone.Battery)
+	// 	fmt.Println("Ram: " + phone.Ram)
+	// 	fmt.Println("Storage: " + phone.Storage)
+	// 	fmt.Println()
+	// }
 	return smartphones
 }
 
