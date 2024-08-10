@@ -15,6 +15,7 @@ func main() {
 	})
 	http.HandleFunc("/send-email", service.EmailRecommendations)
 	http.HandleFunc("/get-recommendations", service.RecommendSmartphones)
+	http.HandleFunc("/compare-smartphones", service.CompareSmartphone)
 
 	handler := cors.Default().Handler(http.DefaultServeMux)
 
