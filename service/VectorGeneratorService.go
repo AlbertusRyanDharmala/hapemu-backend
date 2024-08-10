@@ -196,7 +196,7 @@ func getValueForCamera(camera int) float64 {
 func getValueForBattery(battery string) float64 {
 	var batteryValue, err = strconv.Atoi(battery)
 	if err != nil {
-		fmt.Println("error converting battery string to integer")
+		fmt.Printf("error converting battery string to integer %s\n", battery)
 	}
 	if batteryValue < 4000 {
 		return 1
@@ -430,7 +430,7 @@ func convertSmartphoneToVecForCompare(phone1, phone2 model.Smartphone) [][]float
 	phone2Vec = append(phone2Vec, getValueForCamera(phone2.DxomarkScore))               // camera
 	phone2Vec = append(phone2Vec, getValueForBattery(phone2.Battery))                   // battery
 	phone2Vec = append(phone2Vec, getValueForRam(phone2.Ram, ramResult[1]))             // ram
-	phone2Vec = append(phone2Vec, getValueForStorage(phone2.Storage, storageResult[0])) // storage
+	phone2Vec = append(phone2Vec, getValueForStorage(phone2.Storage, storageResult[1])) // storage
 
 	smartphonesVecs = append(smartphonesVecs, phone1Vec)
 	smartphonesVecs = append(smartphonesVecs, phone2Vec)

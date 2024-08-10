@@ -35,6 +35,7 @@ func CompareSmartphone(w http.ResponseWriter, r *http.Request) {
 	var phone2 = getSmartphoneByName(comparisonRequest.PhoneName2)
 	var vectors = convertSmartphoneToVecForCompare(phone1, phone2)
 	comparisonResponse.Similarity = cosineSimilarity(vectors[0], vectors[1])
+	fmt.Printf("similarity %f\n", comparisonResponse.Similarity)
 
 	w.Header().Set("Content-Type", "application/json")
 	response, err := json.Marshal(comparisonResponse)

@@ -127,7 +127,7 @@ func getSmartphoneByName(phoneName string) model.Smartphone {
 	}
 	defer db.Close()
 
-	sqlStatement := `SELECT name, "segmentPrice", processor,"dxomarkScore", battery, ram, storage FROM smartphones WHERE name LIKE $1`
+	sqlStatement := `SELECT name, "segmentPrice", processor,"dxomarkScore", battery, ram, storage FROM smartphones WHERE name = $1`
 	rows, err := db.Query(sqlStatement, phoneName)
 	if err != nil {
 		fmt.Println("failed on query " + err.Error())
@@ -177,19 +177,19 @@ func getSmartphoneByName(phoneName string) model.Smartphone {
 		if battery.Valid {
 			smartphone.Battery = battery.String
 		} else {
-			smartphone.Battery = "" // Default value or handle appropriately
+			smartphone.Battery = "10000" // Default value or handle appropriately
 		}
 
 		if ram.Valid {
 			smartphone.Ram = ram.String
 		} else {
-			smartphone.Ram = "" // Default value or handle appropriately
+			smartphone.Ram = "10000" // Default value or handle appropriately
 		}
 
 		if storage.Valid {
 			smartphone.Storage = storage.String
 		} else {
-			smartphone.Storage = "" // Default value or handle appropriately
+			smartphone.Storage = "10000" // Default value or handle appropriately
 		}
 		fmt.Println(smartphone)
 	}
