@@ -37,13 +37,13 @@ func (rs *RecommendationService) RecommendSmartphones(w http.ResponseWriter, r *
 		return
 	}
 
-	var targetPhoneVec = rs.vectorGeneratorService.ConvertRecommendationRequestToTargetVec(recommendationsRequest)
+	var userPreferenceVector = rs.vectorGeneratorService.ConvertUserPreferenceToTargetVec(recommendationsRequest)
 	var similarities []model.SmartphoneSimilarity
 	var smartphones = rs.hapemuDatabaseAccessor.GetSmartphoneList()
 
 	for _, smartphone := range smartphones {
-		var smartphonesVec = rs.vectorGeneratorService.ConvertSmartphoneToVec(smartphone, targetPhoneVec)
-		similarity := rs.cosineSimilarityService.CosineSimilarity(smartphonesVec, targetPhoneVec)
+		var smartphonesVec = rs.vectorGeneratorService.ConvertSmartphoneToVec(smartphone, userPreferenceVector)
+		similarity := rs.cosineSimilarityService.CosineSimilarity(smartphonesVec, userPreferenceVector)
 		similarities = append(similarities, model.SmartphoneSimilarity{Name: smartphone.Name, Similarity: similarity})
 	}
 	sort.Slice(similarities, func(i, j int) bool {

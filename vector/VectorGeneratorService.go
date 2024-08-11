@@ -289,14 +289,14 @@ func getValueForStorage(storage string, storageVec float64) float64 {
 	}
 }
 
-func (vgs *VectorGeneratorService) ConvertSmartphoneToVec(smartphone model.Smartphone, targetVec []float64) []float64 {
+func (vgs *VectorGeneratorService) ConvertSmartphoneToVec(smartphone model.Smartphone, userPreferenceVector []float64) []float64 {
 	var smartphonesVecs []float64
-	smartphonesVecs = append(smartphonesVecs, getValueForPrice(smartphone.SegmentPrice))            // price
-	smartphonesVecs = append(smartphonesVecs, getValueForProcessor(smartphone.Processor))           // processor
-	smartphonesVecs = append(smartphonesVecs, getValueForCamera(smartphone.DxomarkScore))           // camera
-	smartphonesVecs = append(smartphonesVecs, getValueForBattery(smartphone.Battery))               // battery
-	smartphonesVecs = append(smartphonesVecs, getValueForRam(smartphone.Ram, targetVec[4]))         // ram
-	smartphonesVecs = append(smartphonesVecs, getValueForStorage(smartphone.Storage, targetVec[5])) // storage
+	smartphonesVecs = append(smartphonesVecs, getValueForPrice(smartphone.SegmentPrice))                       // price
+	smartphonesVecs = append(smartphonesVecs, getValueForProcessor(smartphone.Processor))                      // processor
+	smartphonesVecs = append(smartphonesVecs, getValueForCamera(smartphone.DxomarkScore))                      // camera
+	smartphonesVecs = append(smartphonesVecs, getValueForBattery(smartphone.Battery))                          // battery
+	smartphonesVecs = append(smartphonesVecs, getValueForRam(smartphone.Ram, userPreferenceVector[4]))         // ram
+	smartphonesVecs = append(smartphonesVecs, getValueForStorage(smartphone.Storage, userPreferenceVector[5])) // storage
 	return smartphonesVecs
 }
 
@@ -327,7 +327,7 @@ func getValue(str string) float64 {
 	return 2.5 // default value
 }
 
-func (vgs *VectorGeneratorService) ConvertRecommendationRequestToTargetVec(request model.RecommendationsRequest) []float64 {
+func (vgs *VectorGeneratorService) ConvertUserPreferenceToTargetVec(request model.RecommendationsRequest) []float64 {
 	var vec []float64
 
 	vec = append(vec, getPriceValue(request.Price))
