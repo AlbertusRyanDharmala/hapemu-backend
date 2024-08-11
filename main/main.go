@@ -14,7 +14,7 @@ import (
 
 func main() {
 	cosineSimilarityService := cosine.NewCosineSimilarityService()
-	vectorGeneratorService := vector.NewCosineSimilarityService()
+	vectorGeneratorService := vector.NewVectorGeneratorService()
 	hapemuDatabaseAccessor := accessor.NewHapemuDatabaseAccessor()
 	emailService := service.NewEmailService(587, "smtp.gmail.com", "hapemu.id@gmail.com", "fdvtmvobhemhxvvi")
 	recommendationService := service.NewRecommendationService(cosineSimilarityService, vectorGeneratorService, hapemuDatabaseAccessor)

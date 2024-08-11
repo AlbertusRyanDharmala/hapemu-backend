@@ -10,7 +10,7 @@ import (
 
 type VectorGeneratorService struct{}
 
-func NewCosineSimilarityService() *VectorGeneratorService {
+func NewVectorGeneratorService() *VectorGeneratorService {
 	return &VectorGeneratorService{}
 }
 
